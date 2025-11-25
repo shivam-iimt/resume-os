@@ -1,0 +1,46 @@
+# ---------------------------------------------------
+# GLOBAL IGNORE (applies to ALL microservices)
+# ---------------------------------------------------
+
+# node modules (in every folder)
+node_modules
+**/node_modules/
+./node_modules/
+
+# dist/build output (in every service)
+dist/
+**/dist/
+build/
+**/build/
+
+# TypeScript output
+*.tsbuildinfo
+
+# environment variables
+.env
+**/*.env
+
+# logs
+logs/
+**/logs/
+*.log
+
+# coverage reports
+coverage/
+**/coverage/
+
+# temporary/cache
+tmp/
+**/tmp/
+.cache/
+**/.cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+

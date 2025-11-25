@@ -9,7 +9,12 @@
   ],
   "scripts": {
     "bootstrap": "npm install",
-    "dev:all": "echo \"Run services individually\"",
-    "lint": "echo \"Run linters per package\""
+    "dev:all": "echo \"Run services individually\""
+  },
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10"
   }
 }
