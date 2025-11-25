@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.3.1",
+    "@types/nodemailer": "^7.0.4",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
