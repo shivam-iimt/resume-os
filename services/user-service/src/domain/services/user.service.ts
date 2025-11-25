@@ -1,7 +1,10 @@
 import { User } from "../models/User";
 
 export default {
-  getUser: async (id: string) => User.findById(id),
-  updateUser: async (id: string, data: any) =>
+  getUser: (id: string) => User.findById(id),
+
+  updateUser: (id: string, data: any) =>
     User.findByIdAndUpdate(id, data, { new: true }),
+
+  deleteUser: (id: string) => User.findByIdAndDelete(id),
 };
