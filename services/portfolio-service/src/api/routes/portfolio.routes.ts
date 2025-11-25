@@ -1,0 +1,23 @@
+import { Router } from "express";
+import { auth } from "../../core/middlewares/auth";
+import {
+  createPortfolio,
+  updatePortfolio,
+  deletePortfolio,
+  getMyPortfolios,
+  getPortfolio,
+  publicPortfolio,
+} from "../controllers/portfolio.controller";
+
+const router = Router();
+
+router.post("/", auth, createPortfolio);
+router.get("/", auth, getMyPortfolios);
+router.get("/:id", auth, getPortfolio);
+router.put("/:id", auth, updatePortfolio);
+router.delete("/:id", auth, deletePortfolio);
+
+// Public access
+router.get("/public/:username", publicPortfolio);
+
+export default router;
