@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Notification from "../../domain/models/Notification";
-import { notificationQueue } from "../../domain/queues/notification.queue";
+import { notificationQueue } from "../../queues/notification.queue";
 
 export const sendNotification = async (req: Request, res: Response) => {
   const { userId, email, title, message } = req.body;
