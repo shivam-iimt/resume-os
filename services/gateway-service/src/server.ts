@@ -1,25 +1,89 @@
 import express from "express";
 import cors from "cors";
-import { ENV } from "./core/config/env";
-import gatewayRoutes from "./routes/gateway.routes";
-import { logger } from "./core/middlewares/logger";
-import { apiLimiter } from "./core/middlewares/rateLimit";
-import { authMiddleware } from "./core/middlewares/auth";
+import { createProxyMiddleware } from "http-proxy-middleware";
 
 const app = express();
 
 app.use(cors());
-app.use(express.json());
-app.use(logger);
-app.use(apiLimiter);
-app.use(authMiddleware);
 
-app.use("/api", gatewayRoutes);
-
-app.get("/", (req, res) => {
-  res.send("API Gateway Running");
+// Health check
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", service: "gateway" });
 });
 
-app.listen(ENV.PORT, () => {
-  console.log(`🚀 Gateway-Service running on ${ENV.PORT}`);
+
+// Auth Service
+app.use(
+  "/api/auth",
+  createProxyMiddleware({
+    target: "http://127.0.0.1:4101",
+    changeOrigin: true,
+    pathRewrite: { "^/api/auth": "/auth" },
+  })
+);
+
+// User Service
+app.use(
+  "/api/user",
+  createProxyMiddleware({
+    target: "http://127.0.0.1:4102",
+    changeOrigin: true,
+    pathRewrite: { "^/api/user": "/user" },
+  })
+);
+
+// Resume Service
+app.use(
+  "/api/resume",
+  createProxyMiddleware({
+    target: "http://127.0.0.1:4103",
+    changeOrigin: true,
+    pathRewrite: { "^/api/resume": "/resume" },
+  })
+);
+
+// Portfolio Service
+app.use(
+  "/api/portfolio",
+  createProxyMiddleware({
+    target: "http://127.0.0.1:4104",
+    changeOrigin: true,
+    pathRewrite: { "^/api/portfolio": "/portfolio" },
+  })
+);
+
+// File Service
+app.use(
+  "/api/file",
+  createProxyMiddleware({
+    target: "http://127.0.0.1:4105",
+    changeOrigin: true,
+    pathRewrite: { "^/api/file": "/file" },
+  })
+);
+
+// AI Service
+app.use(
+  "/api/ai",
+  createProxyMiddleware({
+    target: "http://127.0.0.1:4106",
+    changeOrigin: true,
+    pathRewrite: { "^/api/ai": "/ai" },
+  })
+);
+
+// Notification Service
+app.use(
+  "/api/notification",
+  createProxyMiddleware({
+    target: "http://127.0.0.1:4107",
+    changeOrigin: true,
+    pathRewrite: { "^/api/notification": "/notification" },
+  })
+);
+
+const PORT = process.env.PORT || 4100;
+
+app.listen(PORT, () => {
+  console.log("🚀 Gateway running on", PORT);
 });
