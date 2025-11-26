@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/user", userRoutes);
+app.use("/user", userRoutes);
 
 const PORT = process.env.PORT || 4102;
 
