@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
 import authRoutes from "./api/routes/auth.routes";
-import { connectDB } from "./config/db";
+import { connectDB } from "./core/config/db";
 
 dotenv.config({
   path: path.join(__dirname, "../.env"),
