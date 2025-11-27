@@ -1,16 +1,21 @@
 import express from "express";
 import cors from "cors";
 import { createProxyMiddleware } from "http-proxy-middleware";
+import { requestLogger } from "./core/middlewares/requestLogger";
+import { errorHandler } from "./core/middlewares/errorHandler";
+import { logger } from "./core/logger";
+import { securityMiddlewares, apiLimiter } from "./core/middlewares/security";
 
 const app = express();
-
 app.use(cors());
+app.use(express.json());
+app.use(securityMiddlewares);
+app.use("/api/*", apiLimiter);
+app.use(requestLogger);
 
-// Health check
 app.get("/health", (req, res) => {
   res.json({ status: "ok", service: "gateway" });
 });
-
 
 // Auth Service
 app.use(
@@ -81,9 +86,9 @@ app.use(
     pathRewrite: { "^/api/notification": "/notification" },
   })
 );
-
+app.use(errorHandler);
 const PORT = process.env.PORT || 4100;
 
 app.listen(PORT, () => {
-  console.log("🚀 Gateway running on", PORT);
+  logger.info(`Gateway-Service running on ${PORT}`);
 });

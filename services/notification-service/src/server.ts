@@ -4,6 +4,10 @@ import { connectDB } from "./core/config/db";
 import notificationRoutes from "./api/routes/notification.routes";
 import dotenv from "dotenv";
 import path from "path";
+import { requestLogger } from "./core/middlewares/requestLogger";
+import { errorHandler } from "./core/middlewares/errorHandler";
+import { logger } from "./core/logger";
+import { securityMiddlewares, apiLimiter } from "./core/middlewares/security";
 
 // 🔥 Load .env from correct directory (monorepo safe)
 dotenv.config({
@@ -15,16 +19,19 @@ console.log("ENV DEBUG (Notification-Service):", {
   REDIS_PORT: process.env.REDIS_PORT,
   EMAIL_USER: process.env.EMAIL_USER,
 });
-
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-app.use("/api/notification", notificationRoutes);
+app.use(securityMiddlewares);
+app.use("/notification/*", apiLimiter);
+app.use(requestLogger);
+app.use("/notification", notificationRoutes);
+app.get("/health", (req, res) => res.json({ status: "ok" }));
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 4107;
 
-app.listen(PORT, async () => {
-  await connectDB();
-  console.log(`Notification-Service running on ${PORT}`);
+connectDB();
+app.listen(PORT, () => {
+  logger.info(`Notification-Service running on ${PORT}`);
 });
